@@ -8,6 +8,8 @@ public class Messages extends NLS {
   public static String LOGIN_ERROR_DIALOG_MESSAGE;
   public static String LOGIN_ERROR_DIALOG_TITLE;
   public static String LOGIN_ERROR_IN_PROGRESS;
+  public static String LOGIN_ERROR_LOCAL_SERVER_INIT;
+  public static String LOGIN_ERROR_LOCAL_SERVER_RUN;
   public static String LOGIN_MENU_LOGGED_IN;
   public static String LOGIN_MENU_LOGGED_OUT;
   public static String LOGIN_TOOLTIP_LOGGED_IN;
