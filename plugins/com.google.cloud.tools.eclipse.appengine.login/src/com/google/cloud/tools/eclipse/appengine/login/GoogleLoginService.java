@@ -81,7 +81,7 @@ public class GoogleLoginService implements IGoogleLoginService {
       }
     };
 
-    loginServiceUi = new LoginServiceUi(workbench, shellProvider);
+    loginServiceUi = new LoginServiceUi(workbench, shellProvider, workbench.getDisplay());
     loginState = new GoogleLoginState(
         Constants.getOAuthClientId(), Constants.getOAuthClientSecret(), OAUTH_SCOPES,
         new TransientOAuthDataStore(eclipseContext), loginServiceUi, new LoginServiceLogger());
