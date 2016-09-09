@@ -78,7 +78,8 @@ public class AuthorizationCodeReceiver {
   }
 
   /**
-   * Waits for a login result to arrive for the given timeout or until interrupted.
+   * Waits for a login result to arrive for the given timeout or until interrupted. Intended to
+   * be called in a polling loop until it returns true.
    *
    * @param timeout in millisecond. Cannot be 0
    * @return true if the web server consumed the login result
@@ -102,14 +103,14 @@ public class AuthorizationCodeReceiver {
     try {
       server.stop();
       server.join();
-      logger.log(Level.INFO, "Stopped the local web server for login.");
     } catch (Exception ex) {
       logger.log(Level.WARNING, "Failed to stop the local web server for login.", ex);
     }
   }
 
   public String getAuthorizationCode() {
-    Preconditions.checkState(resultConsumed);
+    Preconditions.checkState(server != null, "Server was never created.");
+    Preconditions.checkState(resultConsumed, "Call this when waitForCode() returns true.");
 
     return authorizationCode;
   }
