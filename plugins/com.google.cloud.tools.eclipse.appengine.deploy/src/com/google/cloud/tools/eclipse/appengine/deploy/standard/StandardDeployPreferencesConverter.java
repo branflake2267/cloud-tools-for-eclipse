@@ -25,7 +25,9 @@ public class StandardDeployPreferencesConverter {
     }
 
     configuration.setPromote(preferences.isAutoPromote());
-    configuration.setStopPreviousVersion(preferences.isStopPreviousVersion());
+    if (preferences.isAutoPromote()) {
+      configuration.setStopPreviousVersion(preferences.isStopPreviousVersion());
+    }
 
     if (preferences.isOverrideDefaultVersioning()) {
       configuration.setVersion(preferences.getVersion());
