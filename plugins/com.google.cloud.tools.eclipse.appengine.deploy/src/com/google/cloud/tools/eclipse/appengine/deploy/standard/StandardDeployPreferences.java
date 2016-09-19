@@ -5,6 +5,8 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.osgi.service.prefs.BackingStoreException;
 
+import com.google.common.annotations.VisibleForTesting;
+
 public class StandardDeployPreferences {
 
   public static final String PREFERENCE_STORE_QUALIFIER = "com.google.cloud.tools.eclipse.appengine.deploy";
@@ -28,7 +30,8 @@ public class StandardDeployPreferences {
     this(new ProjectScope(project).getNode(PREFERENCE_STORE_QUALIFIER));
   }
 
-  private StandardDeployPreferences(IEclipsePreferences preferences) {
+  @VisibleForTesting
+  StandardDeployPreferences(IEclipsePreferences preferences) {
     preferenceStore = preferences;
   }
 

@@ -101,8 +101,6 @@ public class DeployPreferencesPanel extends Composite {
 
     createPromoteSection();
 
-    createStopPreviousVersionSection();
-
     createAdvancedSection();
 
     Dialog.applyDialogFont(this);
@@ -121,7 +119,6 @@ public class DeployPreferencesPanel extends Composite {
     setupProjectIdDataBinding(bindingContext);
     setupProjectVersionDataBinding(bindingContext);
     setupAutoPromoteDataBinding(bindingContext);
-    setupStopPreviousVersionDataBinding(bindingContext);
     setupBucketDataBinding(bindingContext);
 
     observables = new ObservablesManager();
@@ -164,13 +161,19 @@ public class DeployPreferencesPanel extends Composite {
 
   private void setupAutoPromoteDataBinding(DataBindingContext context) {
     ISWTObservableValue promoteButton = WidgetProperties.selection().observe(autoPromoteButton);
-    IObservableValue promoteModel = PojoProperties.value("autoPromote").observe(model);
-    context.bindValue(promoteButton, promoteModel);
-  }
-
-  private void setupStopPreviousVersionDataBinding(DataBindingContext context) {
     ISWTObservableValue stopPreviousVersion = WidgetProperties.selection().observe(stopPreviousVersionButton);
+    ISWTObservableValue stopPreviousVersionEnablement = WidgetProperties.enabled().observe(stopPreviousVersionButton);
+
+    // use an intermediary value to control the enabled state of stopPreviousVersionButton based on the promote
+    // checkbox's state
+    WritableValue enablement = new WritableValue();
+    context.bindValue(promoteButton, enablement);
+    context.bindValue(stopPreviousVersionEnablement, enablement);
+
+    IObservableValue promoteModel = PojoProperties.value("autoPromote").observe(model);
     IObservableValue stopPreviousVersionModel = PojoProperties.value("stopPreviousVersion").observe(model);
+
+    context.bindValue(promoteButton, promoteModel);
     context.bindValue(stopPreviousVersion, stopPreviousVersionModel);
   }
 
@@ -265,15 +268,12 @@ public class DeployPreferencesPanel extends Composite {
         MessageDialog.openError(getShell(), Messages.getString("cannot.open.browser"), ex.getLocalizedMessage());
       }
     }));
-    GridLayoutFactory.fillDefaults().generateLayout(promoteComposite);
-  }
 
-  private void createStopPreviousVersionSection() {
-    Composite composite = new Composite(this, SWT.NONE);
-
-    stopPreviousVersionButton = new Button(composite, SWT.CHECK);
+    stopPreviousVersionButton = new Button(promoteComposite, SWT.CHECK);
     stopPreviousVersionButton.setText(Messages.getString("stop.previous.version"));
-    GridLayoutFactory.fillDefaults().generateLayout(composite);
+    GridDataFactory.swtDefaults().indent(INDENT_CHECKBOX_ENABLED_WIDGET, 0).applyTo(stopPreviousVersionButton);
+
+    GridLayoutFactory.fillDefaults().generateLayout(promoteComposite);
   }
 
   private void createAdvancedSection() {
